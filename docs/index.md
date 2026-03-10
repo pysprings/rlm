@@ -2,8 +2,6 @@
 
 A quick, visual-first walk-through of Recursive Language Models in 77 lines of code.
 
-Use the navigation sidebar or next/previous buttons to step through the talk page by page.
-
 - [1. Title](01-title.md)
 - [2. Problem](02-problem.md)
 - [3. Build Overview](03-build.md)
