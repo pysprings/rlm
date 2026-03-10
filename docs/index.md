@@ -15,5 +15,6 @@ Use the navigation sidebar or next/previous buttons to step through the talk pag
 - [3.6 Step 6: Full loop](03-06-step-6-together.md)
 - [4. Implementation](04-implementation.md)
 - [5. Chatbot](05-chatbot.md)
-- [6. Left Out](06-left-out.md)
-- [7. Punchline](07-punchline.md)
+- [6. Demo](05-demo.md)
+- [7. Left Out](06-left-out.md)
+- [8. Punchline](07-punchline.md)

@@ -11,6 +11,7 @@ watch_list = [
     "docs/03-06-step-6-together.md",
     "docs/04-implementation.md",
     "docs/05-chatbot.md",
+    "docs/05-demo.md",
     "docs/06-left-out.md",
     "docs/07-punchline.md",
 ]

@@ -13,8 +13,11 @@ client = OpenAI()  # uses OPENAI_API_KEY env var
 SYSTEM = """You answer queries using a Python REPL. \
 The variable `context` holds your input data.
 You have `llm_query(prompt)` to call a sub-LLM (~500K char capacity).
-Call `FINAL(value)` inside a code block to return your answer.
+Call `FINAL(value)` inside a code block to return your answer — \
+in the same block where you produce the final answer.
 Wrap all code in ```repl ... ``` blocks. \
+Use print() to inspect intermediate values. \
+Output from print() and errors are returned as your next message.
 Always explore context before answering.
 
 Example:
@@ -31,8 +34,8 @@ class _Done(Exception):
     def __init__(self, value): self.value = value
 
 
-def rlm(query, context, model="gpt-4o", sub_model="gpt-4o-mini",
-        max_iters=20):
+def rlm(query, context, model="gpt-5.4", sub_model="gpt-5-mini",
+        max_iters=30, verbose=False, reasoning_effort="low"):
     output = []
 
     def final(v): raise _Done(str(v))
@@ -56,8 +59,11 @@ def rlm(query, context, model="gpt-4o", sub_model="gpt-4o-mini",
         msgs.append({"role": "user",
                       "content": f"Query: {query}"})
 
+        kwargs = {"model": model, "messages": msgs}
+        if reasoning_effort:
+            kwargs["reasoning_effort"] = reasoning_effort
         resp = client.chat.completions.create(
-            model=model, messages=msgs
+            **kwargs
         ).choices[0].message.content
         msgs.append({"role": "assistant", "content": resp})
 
@@ -65,6 +71,8 @@ def rlm(query, context, model="gpt-4o", sub_model="gpt-4o-mini",
             r'```repl\s*\n(.*?)\n```', resp, re.DOTALL
         ):
             output.clear()
+            if verbose:
+                print(f"\n```repl\n{code}\n```")
             try:
                 exec(code, ns)
             except _Done as d:
@@ -74,6 +82,8 @@ def rlm(query, context, model="gpt-4o", sub_model="gpt-4o-mini",
             out = "\n".join(output) or "(no output)"
             if len(out) > 50000:
                 out = out[:50000] + "...[truncated]"
+            if verbose:
+                print(out)
             msgs.append({"role": "user",
                           "content": f"REPL output:\n{out}"})
 
