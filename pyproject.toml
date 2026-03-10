@@ -15,7 +15,9 @@ build-backend = "hatchling.build"
 [dependency-groups]
 dev = [
     "entangled-cli>=2.4.2",
+    "matplotlib>=3.10.8",
     "ruff>=0.15.4",
+    "seaborn>=0.13.2",
     "zensical>=0.0.24",
 ]
 

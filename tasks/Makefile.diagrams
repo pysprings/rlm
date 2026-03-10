@@ -1,19 +1,38 @@
 DIAGRAMS_DIR := diagrams
 DIAGRAMS_PORT ?= 8001
-DIAGRAMS_PID := $(DIAGRAMS_DIR)/.server.pid
 
-## Build all diagram PNGs and SVGs from .tex sources
-diagrams/build:
-	cd $(DIAGRAMS_DIR) && pdflatex -interaction=nonstopmode -halt-on-error rlm-loop.tex
-	pdftoppm -png -r 300 -singlefile $(DIAGRAMS_DIR)/rlm-loop.pdf $(DIAGRAMS_DIR)/rlm-loop
-	dvisvgm --pdf --font-format=woff2 --exact-bbox $(DIAGRAMS_DIR)/rlm-loop.pdf -o $(DIAGRAMS_DIR)/rlm-loop.svg
-	cp $(DIAGRAMS_DIR)/rlm-loop.png $(DIAGRAMS_DIR)/rlm-loop.svg docs/assets/
+DIAGRAMS_TEX := $(wildcard $(DIAGRAMS_DIR)/*.tex)
+DIAGRAMS_PDF := $(DIAGRAMS_TEX:.tex=.pdf)
+DIAGRAMS_PNG := $(DIAGRAMS_TEX:.tex=.png)
+DIAGRAMS_SVG := $(DIAGRAMS_TEX:.tex=.svg)
+DIAGRAMS_ASSETS := $(patsubst $(DIAGRAMS_DIR)/%.svg,docs/assets/%.svg,$(DIAGRAMS_SVG)) \
+                   $(patsubst $(DIAGRAMS_DIR)/%.png,docs/assets/%.png,$(DIAGRAMS_PNG))
+
+.PRECIOUS: $(DIAGRAMS_PDF) $(DIAGRAMS_PNG) $(DIAGRAMS_SVG)
+
+## Build all diagrams and copy to docs/assets
+diagrams/build: $(DIAGRAMS_ASSETS)
+
+$(DIAGRAMS_DIR)/%.pdf: $(DIAGRAMS_DIR)/%.tex
+	cd $(DIAGRAMS_DIR) && pdflatex -interaction=nonstopmode -halt-on-error $*.tex
+
+$(DIAGRAMS_DIR)/%.png: $(DIAGRAMS_DIR)/%.pdf
+	pdftoppm -png -r 300 -singlefile $< $(DIAGRAMS_DIR)/$*
+
+$(DIAGRAMS_DIR)/%.svg: $(DIAGRAMS_DIR)/%.pdf
+	dvisvgm --pdf --font-format=woff2 --exact-bbox $< -o $@
+
+docs/assets/%.svg: $(DIAGRAMS_DIR)/%.svg
+	cp $< $@
+
+docs/assets/%.png: $(DIAGRAMS_DIR)/%.png
+	cp $< $@
 
 ## Serve diagrams directory on 0.0.0.0 for viewing
 diagrams/serve: diagrams/build
-	@echo "Serving diagrams at http://0.0.0.0:$(DIAGRAMS_PORT)/rlm-loop.png"
+	@echo "Serving diagrams at http://0.0.0.0:$(DIAGRAMS_PORT)/"
 	cd $(DIAGRAMS_DIR) && python3 -m http.server $(DIAGRAMS_PORT) --bind 0.0.0.0
 
 ## Clean diagram build artifacts
 diagrams/clean:
-	rm -f $(DIAGRAMS_DIR)/*.aux $(DIAGRAMS_DIR)/*.log $(DIAGRAMS_DIR)/*.pdf $(DIAGRAMS_DIR)/*.png
+	rm -f $(DIAGRAMS_DIR)/*.aux $(DIAGRAMS_DIR)/*.log $(DIAGRAMS_DIR)/*.pdf $(DIAGRAMS_DIR)/*.png $(DIAGRAMS_DIR)/*.svg
