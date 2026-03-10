@@ -4,6 +4,12 @@ Here's the whole machine. Six pieces, each simple on its own:
 
 [![RLM Architecture](../assets/architecture.svg)](../assets/architecture.svg)
 
+And here's the document-level picture we want the code to create:
+
+<img src="../assets/document-sankey.svg" alt="RLM breaks a long document into chunks, summarizes each chunk, combines the summaries, and writes one answer" width="760">
+
+The main model never has to read the whole document at once. It breaks the text into chunks, analyzes each chunk separately, then combines the short summaries.
+
 We'll walk through each numbered piece, then assemble them into 77 lines.
 
 - [Step 1: The REPL is just a dictionary](03-01-step-1-repl.md) — the namespace

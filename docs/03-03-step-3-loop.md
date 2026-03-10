@@ -1,5 +1,7 @@
 ## Step 3: The conversation loop
 
+[![RLM Loop](../assets/rlm-loop.svg)](../assets/rlm-loop.svg)
+
 The LLM doesn't solve everything in one shot. It iterates: look at the data, write some code, see the output, think, write more code. We model this as a multi-turn chat where REPL outputs show up as messages:
 
 ~~~text

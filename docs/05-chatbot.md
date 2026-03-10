@@ -14,4 +14,6 @@ while True:
         msgs.append(next_user_input()) # wait for human
 ~~~
 
+<img src="../assets/chatbot-loop.svg" alt="Chatbot loop branches: code responses auto-continue through the REPL, while non-code responses get shown to a human and wait for the next input" width="720">
+
 The namespace persists across turns. If the model computed `summary = ...` in turn 1, the user can say "expand on that summary" in turn 3 and the model still has the variable. Like a Jupyter notebook that stays alive across a conversation.
