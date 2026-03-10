@@ -99,7 +99,7 @@
 
 \draw[->, replorange, line width=2pt]
     ([yshift=-0.7cm]nsframe.west) -- ([yshift=-0.7cm]llm.east)
-    node[midway, below=10pt, font=\sffamily\footnotesize, align=center]
+    node[midway, below=16pt, font=\sffamily\footnotesize, align=center]
     {REPL output\\feedback};
 
 % =====================================================
@@ -125,10 +125,12 @@
 % =====================================================
 % FINAL exit arrow — exits right, curves down and along bottom
 % =====================================================
+% Shared Y for the horizontal return segment
+\pgfmathsetmacro{\returnY}{-5.2}
 \draw[->, finalgreen, line width=2pt, dashed]
     (fin.east) -- ([xshift=-0.3cm]nsframe.east |- fin)
-    -- ([xshift=-0.3cm, yshift=-0.5cm]nsframe.east |- msgs.south)
-    -- (-4.5, -4.7 |- msgs.south)
+    -- ([xshift=-0.3cm]nsframe.east |- 0,\returnY)
+    -- (-4.5, \returnY)
     node[at end, left, font=\sffamily\bfseries,
         text=finalgreen] {return answer};
 
