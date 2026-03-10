@@ -1,0 +1,7 @@
+.venv/
+.entangled/
+__pycache__/
+site/
+diagrams/*.aux
+diagrams/*.log
+diagrams/*.pdf

@@ -1,0 +1,15 @@
+## Show Entangled sync status
+entangled/status: deps
+	$(UV) run entangled status
+
+## Tangle code from markdown into source files
+entangled/tangle: deps
+	$(UV) run entangled tangle
+
+## Stitch source edits back into markdown
+entangled/stitch: deps
+	$(UV) run entangled stitch
+
+## Watch markdown and source for live syncing
+entangled/watch: deps
+	$(UV) run entangled watch

@@ -1,0 +1,17 @@
+version = "2.0"
+watch_list = [
+    "docs/01-title.md",
+    "docs/02-problem.md",
+    "docs/03-build.md",
+    "docs/03-01-step-1-repl.md",
+    "docs/03-02-step-2-sub-llm.md",
+    "docs/03-03-step-3-loop.md",
+    "docs/03-04-step-4-final.md",
+    "docs/03-05-step-5-print.md",
+    "docs/03-06-step-6-together.md",
+    "docs/04-implementation.md",
+    "docs/05-chatbot.md",
+    "docs/06-left-out.md",
+    "docs/07-punchline.md",
+]
+style = "basic"

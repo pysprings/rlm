@@ -1,0 +1,19 @@
+DIAGRAMS_DIR := diagrams
+DIAGRAMS_PORT ?= 8001
+DIAGRAMS_PID := $(DIAGRAMS_DIR)/.server.pid
+
+## Build all diagram PNGs and SVGs from .tex sources
+diagrams/build:
+	cd $(DIAGRAMS_DIR) && pdflatex -interaction=nonstopmode -halt-on-error rlm-loop.tex
+	pdftoppm -png -r 300 -singlefile $(DIAGRAMS_DIR)/rlm-loop.pdf $(DIAGRAMS_DIR)/rlm-loop
+	dvisvgm --pdf --font-format=woff2 --exact-bbox $(DIAGRAMS_DIR)/rlm-loop.pdf -o $(DIAGRAMS_DIR)/rlm-loop.svg
+	cp $(DIAGRAMS_DIR)/rlm-loop.png $(DIAGRAMS_DIR)/rlm-loop.svg docs/assets/
+
+## Serve diagrams directory on 0.0.0.0 for viewing
+diagrams/serve: diagrams/build
+	@echo "Serving diagrams at http://0.0.0.0:$(DIAGRAMS_PORT)/rlm-loop.png"
+	cd $(DIAGRAMS_DIR) && python3 -m http.server $(DIAGRAMS_PORT) --bind 0.0.0.0
+
+## Clean diagram build artifacts
+diagrams/clean:
+	rm -f $(DIAGRAMS_DIR)/*.aux $(DIAGRAMS_DIR)/*.log $(DIAGRAMS_DIR)/*.pdf $(DIAGRAMS_DIR)/*.png

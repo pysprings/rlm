@@ -1,0 +1,7 @@
+## Serve docs locally with live reload
+docs/serve: deps
+	$(UV) run zensical serve --dev-addr 0.0.0.0:$(DOCS_PORT)
+
+## Build static docs site
+docs/build: deps
+	$(UV) run zensical build
