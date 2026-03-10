@@ -14,3 +14,11 @@ result = "\n".join(output)
 ~~~
 
 The model calls `print()`. Our lambda catches it. No global state, no cleanup, no `import sys`, no `import io`. The REPL is now *entirely* defined by what's in the namespace dict.
+
+~~~python
+>>> output = []
+>>> ns = {"print": lambda *a: output.append(" ".join(str(x) for x in a))}
+>>> exec('print("hello", 42)', ns)
+>>> output
+['hello 42']
+~~~

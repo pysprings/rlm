@@ -24,6 +24,16 @@ except _Done as d:
     return d.value     # we have our answer
 ~~~
 
+~~~python
+>>> ns = {"FINAL": final}
+>>> try:
+...     exec('FINAL("my answer")', ns)
+... except _Done as d:
+...     print(d.value)
+...
+my answer
+~~~
+
 <img src="../assets/final-flow.svg" alt="FINAL executes as Python, raises _Done, unwinds out of exec, and gets caught by the outer exception handler" width="700">
 
 This is nice because:
